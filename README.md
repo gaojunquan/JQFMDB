@@ -12,6 +12,19 @@
 ####截图
 ![模拟器截图](http://upload-images.jianshu.io/upload_images/1982600-1d9412ee0d109a21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/340)
 
+##安装JQFMDB
+**Cocoapods**
+```
+1. 在 Podfile 中添加 `pod 'JQFMDB'`。
+2. 执行 `pod install` 或 `pod update`。
+3. 导入 \<JQFMDB/JQFMDB.h\>。
+```
+**手动安装**
+```
+1. 下载 JQFMDB 文件夹内的所有内容。
+2. 将 JQFMDB.h和JQFMDB.m 以及FMDB添加(拖放)到你的工程。
+3. 导入 "JQFMDB.h"。
+```
 ##使用方法
 ---
 ####创建数据库
