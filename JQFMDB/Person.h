@@ -16,7 +16,7 @@
 @property (nonatomic, assign)NSInteger luckyNum;
 @property (nonatomic, assign)BOOL sex;
 @property (nonatomic, assign)int age;
-@property (nonatomic, assign)float height;  //float类型存入172.12会变成172.19995
+@property (nonatomic, assign)float height;  //float类型存入172.12会变成172.19995,取值时%.2f等于原值172.12
 @property (nonatomic, assign)double weight;
 
 // 为了测试除以上类型外, 下面的类型不参与建表

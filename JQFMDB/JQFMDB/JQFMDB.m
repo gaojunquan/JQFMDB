@@ -1,9 +1,8 @@
 //
 //  JQFMDB.m
-//  用于测试的工程
 //
 //  Created by Joker on 17/3/7.
-//  Copyright © 2017年 Joker. All rights reserved.
+//  GitHub: https://github.com/gaojunquan/JQFMDB
 //
 
 #import "JQFMDB.h"
