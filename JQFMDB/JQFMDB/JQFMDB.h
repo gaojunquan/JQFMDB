@@ -5,7 +5,7 @@
 //  GitHub: https://github.com/gaojunquan/JQFMDB
 //
 
-#import "FMDB.h"
+#import <Foundation/Foundation.h>
 
 @interface JQFMDB : NSObject
 

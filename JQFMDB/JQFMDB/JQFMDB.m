@@ -6,6 +6,7 @@
 //
 
 #import "JQFMDB.h"
+#import "FMDB.h"
 #import <objc/runtime.h>
 
 // 数据库中常见的几种类型
