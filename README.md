@@ -1,4 +1,3 @@
-![模拟器截图](http://upload-images.jianshu.io/upload_images/1982600-1d9412ee0d109a21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/340)
 ##JQFMDB的特性
 ---
 * 针对于FMDB的二次封装
@@ -6,6 +5,8 @@
 * 操作简单, Model和Dictionary直接存储
 * 拓展性强
 * 不侵入你的任何Model
+
+![模拟器截图](http://upload-images.jianshu.io/upload_images/1982600-1d9412ee0d109a21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/340)
 
 ##使用方法
 ---
