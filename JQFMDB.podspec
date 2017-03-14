@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.name         = "JQFMDB"
   s.version      = "1.0.2"
-  s.summary      = "FMDB的封装,操作简单,线程安全,扩展性强"
+  s.summary      = "FMDB的封装,操作简单,线程安全,扩展性强,直接操作model或dictionary"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -90,7 +90,7 @@ Pod::Spec.new do |s|
   #
 
   # s.source_files  = "JQFMDB/**/*"
-  s.exclude_files = "JQFMDB/JQFMDB/Exclude"
+  s.exclude_files = "JQFMDB/JQFMDB/JQFMDB/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
 
