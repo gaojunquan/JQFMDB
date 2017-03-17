@@ -138,10 +138,9 @@ NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
 ```
 #### 增删改查之删除
 ---
->根据条件语句删除想要删除的数据
-**\- (BOOL)jq_deleteTable:(NSString *)tableName whereFormat:(NSString *)format, ...;**
-删除表中全部数据
-**\- (BOOL)jq_deleteAllDataFromTable:(NSString *)tableName;**
+根据条件语句删除想要删除的数据;删除表中全部数据
+* \- (BOOL)jq_deleteTable:(NSString *)tableName whereFormat:(NSString *)format, ...;
+* \- (BOOL)jq_deleteAllDataFromTable:(NSString *)tableName;
 
 ###### 删除指定数据
 ```
@@ -155,8 +154,8 @@ NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
 ```
 #### 增删改查之更新
 ---
-> parameters为要更新的数据,可以是model或dictionary, format为条件语句
-**\- (BOOL)jq_updateTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...;**
+parameters为要更新的数据,可以是model或dictionary, format为条件语句
+* \- (BOOL)jq_updateTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...;
 
 ###### 更新指定数据
 ```
@@ -170,8 +169,8 @@ NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
 ```
 #### 增删改查之查找
 ---
->parameters为查找到数据后每条数据要存入的模型,可以为model或dictionary
-**\- (NSArray *)jq_lookupTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...;**
+parameters为查找到数据后每条数据要存入的模型,可以为model或dictionary
+* \- (NSArray *)jq_lookupTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...;
 
 ###### 查找指定数据
 ```
@@ -187,7 +186,7 @@ NSLog(@"表中所有数据:%@", personArr);
 ```
 #### 多线程操作之线程安全
 ---
-*以上操作是非线程安全的, 要想保证线程安全,还是采用FMDB的原型,所有操作都放在下面block中执行, 而block块内代码会被提交到一个队列中,从而保证线程安全, 但要注意的是block不能嵌套使用*
+以上操作是非线程安全的, 要想保证线程安全,还是采用FMDB的原型,所有操作都放在下面block中执行, 而block块内代码会被提交到一个队列中,从而保证线程安全, 但要注意的是block不能嵌套使用
 ```
 /**
  将操作语句放入block中即可保证线程安全, 如:
@@ -207,7 +206,7 @@ NSLog(@"表中所有数据:%@", personArr);
     }];
 ```
 ###### 事务
-*用A给B转账100元的问题来简单阐述下事务, 首先查询下A的余额,如果>=100元,那么A账户先减去100元, 接着查询B账户的余额, B账户加上100元, 如果说在这之间有任何一个环节出了问题(余额不够, A查询或减去100元操作失败, B查询或加上100元操作失败),则进行回滚操作,相当于回到操作之前的状态,简单说,这就是一个事务操作*
+用A给B转账100元的问题来简单阐述下事务, 首先查询下A的余额,如果>=100元,那么A账户先减去100元, 接着查询B账户的余额, B账户加上100元, 如果说在这之间有任何一个环节出了问题(余额不够, A查询或减去100元操作失败, B查询或加上100元操作失败),则进行回滚操作,相当于回到操作之前的状态,简单说,这就是一个事务操作
 ###### 事务操作也非常简单, 放在下面block中即可
 ```
 /**
