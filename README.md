@@ -86,13 +86,13 @@ JQFMDB *db = [JQFMDB shareDatabase:@"test.sqlite" path:[NSSearchPathForDirectori
 // 创建表 @"user"=表的名称 表的字段为字典的key,类型为字典的value
 [db jq_createTable:@"user" dicOrModel:@{@"name":@"TEXT", @"age":@"INTEGER"}];
 ```
-#### 增删改查之插入
+### 增删改查之插入
 ----
 无论你想插入的是一个model还是dictionary都没问题,都会智能接收并存储;插入一组数据, 也支持model和dictionary混合的数组
 * \- (BOOL)jq_insertTable:(NSString *)tableName dicOrModel:(id)parameters;
 * \- (NSArray *)jq_insertTable:(NSString *)tableName dicOrModelArray:(NSArray *)dicOrModelArray;
 
-###### 插入一条数据
+##### 插入一条数据
 ```
 Person *person = [[Person alloc] init];
     person.name = @"cleanmonkey";
@@ -108,7 +108,7 @@ Person *person = [[Person alloc] init];
 或者你也可以用字典插入部分数据
 [db jq_insertTable:@"user" dicOrModel:@{@"name":@"cleanmonkey",@"phoneNum":@(18866668888)}];
 ```
-###### 插入一组数据
+##### 插入一组数据
 ```
 NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i < 3; i++) {
@@ -129,62 +129,62 @@ NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
 // 或者也可以是model和dic混合形式的数组
 [db jq_insertTable:@"user" dicOrModelArray:@[person, @{@"name":@"cleanmonkey"}, person]]
 ```
-###### 异步(不阻塞主线程)插入数据, 想来想去还是觉得把异步封装在JQFMDB里不太好
+##### 异步(不阻塞主线程)插入数据, 想来想去还是觉得把异步封装在JQFMDB里不太好
 ```
 //异步(防止UI卡死)插入一条数据, 也同样可以使用线程安全的方法(在jq_inDatabase的block中插入)
    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [db jq_insertTable:@"user" dicOrModel:person];
         });
 ```
-#### 增删改查之删除
+### 增删改查之删除
 ---
 根据条件语句删除想要删除的数据;删除表中全部数据
 * \- (BOOL)jq_deleteTable:(NSString *)tableName whereFormat:(NSString *)format, ...;
 * \- (BOOL)jq_deleteAllDataFromTable:(NSString *)tableName;
 
-###### 删除指定数据
+##### 删除指定数据
 ```
 //删除最后一条数据
 [db jq_deleteTable:@"user" whereFormat:@"WHERE rowid = (SELECT max(rowid) FROM user)"];
 ```
-###### 删除表中全部数据
+##### 删除表中全部数据
 ```
 //删除全部数据
 [db jq_deleteAllDataFromTable:@"user"];
 ```
-#### 增删改查之更新
+### 增删改查之更新
 ---
 parameters为要更新的数据,可以是model或dictionary, format为条件语句
 * \- (BOOL)jq_updateTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...;
 
-###### 更新指定数据
+##### 更新指定数据
 ```
 //更新最后一条数据 name=testName , dicOrModel的参数也可以是name为testName的person
 [db jq_updateTable:@"user" dicOrModel:@{@"name":@"testName"} whereFormat:@"WHERE rowid = (SELECT max(rowid) FROM user)"];
 ```
-###### 更新所有数据
+##### 更新所有数据
 ```
 //把表中所有的name改成godlike
 [db jq_updateTable:@"user" dicOrModel:@{@"name":@"godlike"} whereFormat:nil];
 ```
-#### 增删改查之查找
+### 增删改查之查找
 ---
 parameters为查找到数据后每条数据要存入的模型,可以为model或dictionary
 * \- (NSArray *)jq_lookupTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...;
 
-###### 查找指定数据
+##### 查找指定数据
 ```
 ////查找name=cleanmonkey的数据
 NSArray *personArr = [db jq_lookupTable:@"user" dicOrModel:[Person class] whereFormat:@"where name = 'cleanmonkey'"];
 NSLog(@"name=cleanmonkey:%@", personArr);
 ```
-###### 查找所有表中数据
+##### 查找所有表中数据
 ```
 //查找表中所有数据
 NSArray *personArr = [db jq_lookupTable:@"user" dicOrModel:[Person class] whereFormat:nil];
 NSLog(@"表中所有数据:%@", personArr);
 ```
-#### 多线程操作之线程安全
+### 多线程操作之线程安全
 ---
 以上操作是非线程安全的, 要想保证线程安全,还是采用FMDB的原型,所有操作都放在下面block中执行, 而block块内代码会被提交到一个队列中,从而保证线程安全, 但要注意的是block不能嵌套使用
 ```
@@ -198,16 +198,16 @@ NSLog(@"表中所有数据:%@", personArr);
  */
 - (void)jq_inDatabase:(void (^)(void))block;
 ```
-###### 例:将一系列操作都放在block中会保证线程安全
+##### 例:将一系列操作都放在block中会保证线程安全
 ```
 [db jq_inDatabase:^{
          [db jq_insertTable:@"user" dicOrModel:@{@"name":@"cleanmonkey"}];
          [db jq_lookupTable:@"user" dicOrModel:[Person class] whereFormat:@"where name = 'cleanmonkey'"];
     }];
 ```
-###### 事务
+##### 事务
 用A给B转账100元的问题来简单阐述下事务, 首先查询下A的余额,如果>=100元,那么A账户先减去100元, 接着查询B账户的余额, B账户加上100元, 如果说在这之间有任何一个环节出了问题(余额不够, A查询或减去100元操作失败, B查询或加上100元操作失败),则进行回滚操作,相当于回到操作之前的状态,简单说,这就是一个事务操作
-###### 事务操作也非常简单, 放在下面block中即可
+##### 事务操作也非常简单, 放在下面block中即可
 ```
 /**
  Person *p = [[Person alloc] init];
