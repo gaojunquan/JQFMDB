@@ -89,10 +89,9 @@ JQFMDB *db = [JQFMDB shareDatabase:@"test.sqlite" path:[NSSearchPathForDirectori
 #### 增删改查之插入
 ----
 无论你想插入的是一个model还是dictionary都没问题,都会智能接收并存储
-**\- (BOOL)jq_insertTable:(NSString *)tableName dicOrModel:(id)parameters;**
-
+* \- (BOOL)jq_insertTable:(NSString *)tableName dicOrModel:(id)parameters;
 插入一组数据, 也支持model和dictionary混合的数组
-**\- (NSArray *)jq_insertTable:(NSString *)tableName dicOrModelArray:(NSArray *)dicOrModelArray;**
+* \- (NSArray *)jq_insertTable:(NSString *)tableName dicOrModelArray:(NSArray *)dicOrModelArray;
 
 ###### 插入一条数据
 ```
