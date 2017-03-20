@@ -3,8 +3,10 @@
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](https://github.com/gaojunquan/JQFMDB) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/gaojunquan/JQFMDB) 
 [![CocoaPods](http://img.shields.io/cocoapods/v/JQFMDB.svg?style=flat)](http://cocoapods.org/?q=JQFMDB)
 
+>**为了大家和项目的考虑, 如果使用过程中出现问题或者需要新功能接口提供, 请提一个issue, 需求合理会马上更新, 我每天都会关注 !**
+
 ## JQFMDB的特性
----
+
 * 针对于FMDB的二次封装
 * 线程安全
 * 操作简单, Model和Dictionary直接存储
@@ -28,7 +30,7 @@
 3. 导入 "JQFMDB.h"。
 ```
 ## 使用方法
----
+
 #### 创建数据库
 
 ##### 单例方法
@@ -56,7 +58,7 @@ JQFMDB *db = [JQFMDB shareDatabase:@"test.sqlite" path:[NSSearchPathForDirectori
 如果操作几个数据库可以init方法获得不同实例, 参数说明同上.
 
 #### 创建表
----
+
 ###### 方式一(用Model创建表)
 ```
 //Person类构成
@@ -137,7 +139,7 @@ NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
         });
 ```
 ### 增删改查之删除
----
+
 根据条件语句删除想要删除的数据;删除表中全部数据
 * \- (BOOL)jq_deleteTable:(NSString *)tableName whereFormat:(NSString *)format, ...;
 * \- (BOOL)jq_deleteAllDataFromTable:(NSString *)tableName;
@@ -153,7 +155,7 @@ NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
 [db jq_deleteAllDataFromTable:@"user"];
 ```
 ### 增删改查之更新
----
+
 parameters为要更新的数据,可以是model或dictionary, format为条件语句
 * \- (BOOL)jq_updateTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...;
 
@@ -168,7 +170,7 @@ parameters为要更新的数据,可以是model或dictionary, format为条件语�
 [db jq_updateTable:@"user" dicOrModel:@{@"name":@"godlike"} whereFormat:nil];
 ```
 ### 增删改查之查找
----
+
 parameters为查找到数据后每条数据要存入的模型,可以为model或dictionary
 * \- (NSArray *)jq_lookupTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...;
 
@@ -185,7 +187,7 @@ NSArray *personArr = [db jq_lookupTable:@"user" dicOrModel:[Person class] whereF
 NSLog(@"表中所有数据:%@", personArr);
 ```
 ### 多线程操作之线程安全
----
+
 以上操作是非线程安全的, 要想保证线程安全,还是采用FMDB的原型,所有操作都放在下面block中执行, 而block块内代码会被提交到一个队列中,从而保证线程安全, 但要注意的是block不能嵌套使用
 ```
 /**
@@ -227,7 +229,7 @@ NSLog(@"表中所有数据:%@", personArr);
 ```
 `
 #### Thanks
-----
+
 **Demo(用法注释很详细)和JQFMDB都已经放在了[我的GitHub](https://github.com/gaojunquan/JQFMDB)上,更多功能会陆续更新 如果觉得有用,帮忙点个star,十分感谢!**
 
 
