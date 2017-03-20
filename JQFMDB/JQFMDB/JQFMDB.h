@@ -102,6 +102,21 @@
 // `返回表中的字段名
 - (NSArray *)jq_columnNameArray:(NSString *)tableName;
 
+// `关闭数据库
+- (void)close;
+// `打开数据库 (每次shareDatabase系列操作时已经open,当调用close后若进行db操作需重新open或调用shareDatabase)
+- (void)open;
+
+/**
+ 增加新字段, 在建表后还想新增字段,可以在原建表model或新model中新增对应属性,然后传入即可新增该字段,已在事务中执行
+ 
+ @param tableName 表的名称
+ @param parameters 如果传Model:数据库新增字段为建表时model所没有的属性,如果传dictionary格式为@{@"newname":@"TEXT"}
+ @param nameArr 不允许生成字段的属性名的数组
+ @return 是否成功
+ */
+- (BOOL)jq_alterTable:(NSString *)tableName dicOrModel:(id)parameters excludeName:(NSArray *)nameArr;
+- (BOOL)jq_alterTable:(NSString *)tableName dicOrModel:(id)parameters;
 
 
 // =============================   多线程操作    ===============================

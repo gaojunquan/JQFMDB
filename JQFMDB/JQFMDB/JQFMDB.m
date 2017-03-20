@@ -36,10 +36,7 @@ static FMDatabase *_db;
 static JQFMDB *jqdb = nil;
 + (instancetype)shareDatabase
 {
-    if (!jqdb) {
-        [JQFMDB shareDatabase:nil];
-    }
-    return jqdb;
+    return [JQFMDB shareDatabase:nil];
 }
 
 + (instancetype)shareDatabase:(NSString *)dbName
@@ -68,6 +65,10 @@ static JQFMDB *jqdb = nil;
             _dbName = dbName;
         }
     }
+    if (![_db open]) {
+        NSLog(@"database can not open !");
+        return nil;
+    };
     return jqdb;
 }
 
@@ -108,6 +109,7 @@ static JQFMDB *jqdb = nil;
 
 - (BOOL)jq_createTable:(NSString *)tableName dicOrModel:(id)parameters excludeName:(NSArray *)nameArr
 {
+    
     NSString *sqlStr;
     if ([parameters isKindOfClass:[NSDictionary class]]) {
         sqlStr = [self createTable:tableName dictionary:parameters excludeName:nameArr];
@@ -175,7 +177,7 @@ static JQFMDB *jqdb = nil;
     return fieldStr;
 }
 
-#pragma mark - *************** runtime获取属性名和类型
+#pragma mark - *************** runtime
 - (NSDictionary *)modelToDictionary:(Class)cls excludePropertyName:(NSArray *)nameArr
 {
     NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -193,13 +195,13 @@ static JQFMDB *jqdb = nil;
             [mDic setObject:value forKey:name];
         }
         
-        
     }
+    free(properties);
     
     return mDic;
 }
 
-// 获取model或者dictionary的key和value
+// 获取model的key和value
 - (NSDictionary *)getModelPropertyKeyValue:(id)model tableName:(NSString *)tableName clomnArr:(NSArray *)clomnArr
 {
     NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -218,6 +220,7 @@ static JQFMDB *jqdb = nil;
             [mDic setObject:value forKey:name];
         }
     }
+    free(properties);
     
     return mDic;
 }
@@ -240,7 +243,7 @@ static JQFMDB *jqdb = nil;
 
 // 得到表里的字段名称
 - (NSArray *)getColumnArr:(NSString *)tableName db:(FMDatabase *)db
-{
+{    
     NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
     
     FMResultSet *resultSet = [db getTableSchema:tableName];
@@ -255,9 +258,8 @@ static JQFMDB *jqdb = nil;
 #pragma mark - *************** 增删改查
 - (BOOL)jq_insertTable:(NSString *)tableName dicOrModel:(id)parameters
 {
-
-    BOOL flag;
     
+    BOOL flag;
     NSDictionary *dic;
     NSArray *clomnArr = [self getColumnArr:tableName db:_db];
     if ([parameters isKindOfClass:[NSDictionary class]]) {
@@ -293,6 +295,7 @@ static JQFMDB *jqdb = nil;
 
 - (BOOL)jq_deleteTable:(NSString *)tableName whereFormat:(NSString *)format, ...
 {
+    
     BOOL flag;
     NSMutableString *finalStr = [[NSMutableString alloc] initWithFormat:@"delete from %@  %@", tableName,format];
     flag = [_db executeUpdate:finalStr];
@@ -302,6 +305,7 @@ static JQFMDB *jqdb = nil;
 
 - (BOOL)jq_updateTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...
 {
+    
     BOOL flag;
     NSDictionary *dic;
     NSArray *clomnArr = [self getColumnArr:tableName db:_db];
@@ -334,6 +338,7 @@ static JQFMDB *jqdb = nil;
 
 - (NSArray *)jq_lookupTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...
 {
+    
     NSMutableArray *resultMArr = [NSMutableArray arrayWithCapacity:0];
     NSDictionary *dic;
     NSMutableString *finalStr = [[NSMutableString alloc] initWithFormat:@"select * from %@ %@", tableName, format?format:@""];
@@ -418,6 +423,7 @@ static JQFMDB *jqdb = nil;
 // 直接传一个array插入
 - (NSArray *)jq_insertTable:(NSString *)tableName dicOrModelArray:(NSArray *)dicOrModelArray
 {
+    
     int errorIndex = 0;
     NSMutableArray *resultMArr = [NSMutableArray arrayWithCapacity:0];
     NSDictionary *dic;
@@ -462,6 +468,7 @@ static JQFMDB *jqdb = nil;
 
 - (BOOL)jq_deleteTable:(NSString *)tableName
 {
+    
     NSString *sqlstr = [NSString stringWithFormat:@"DROP TABLE %@", tableName];
     if (![_db executeUpdate:sqlstr])
     {
@@ -472,6 +479,7 @@ static JQFMDB *jqdb = nil;
 
 - (BOOL)jq_deleteAllDataFromTable:(NSString *)tableName
 {
+    
     NSString *sqlstr = [NSString stringWithFormat:@"DELETE FROM %@", tableName];
     if (![_db executeUpdate:sqlstr])
     {
@@ -483,6 +491,7 @@ static JQFMDB *jqdb = nil;
 
 - (BOOL)jq_isExistTable:(NSString *)tableName
 {
+    
     FMResultSet *set = [_db executeQuery:@"SELECT count(*) as 'count' FROM sqlite_master WHERE type ='table' and name = ?", tableName];
     while ([set next])
     {
@@ -503,6 +512,7 @@ static JQFMDB *jqdb = nil;
 
 - (int)jq_tableItemCount:(NSString *)tableName
 {
+    
     NSString *sqlstr = [NSString stringWithFormat:@"SELECT count(*) as 'count' FROM %@", tableName];
     FMResultSet *set = [_db executeQuery:sqlstr];
     while ([set next])
@@ -512,10 +522,72 @@ static JQFMDB *jqdb = nil;
     return 0;
 }
 
+- (void)close
+{
+    [_db close];
+}
+
+- (void)open
+{
+    [_db open];
+}
+
+- (BOOL)jq_alterTable:(NSString *)tableName dicOrModel:(id)parameters
+{
+    return [self jq_alterTable:tableName dicOrModel:parameters excludeName:nil];
+}
+
+- (BOOL)jq_alterTable:(NSString *)tableName dicOrModel:(id)parameters excludeName:(NSArray *)nameArr
+{
+    __block BOOL flag;
+    [self jq_inTransaction:^(BOOL *rollback) {
+        if ([parameters isKindOfClass:[NSDictionary class]]) {
+            for (NSString *key in parameters) {
+                if ([nameArr containsObject:key]) {
+                    continue;
+                }
+                flag = [_db executeUpdate:[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@", tableName, key, parameters[key]]];
+                if (!flag) {
+                    *rollback = YES;
+                    return;
+                }
+            }
+            
+        } else {
+            Class CLS;
+            if ([parameters isKindOfClass:[NSString class]]) {
+                if (!NSClassFromString(parameters)) {
+                    CLS = nil;
+                } else {
+                    CLS = NSClassFromString(parameters);
+                }
+            } else if ([parameters isKindOfClass:[NSObject class]]) {
+                CLS = [parameters class];
+            } else {
+                CLS = parameters;
+            }
+            NSDictionary *modelDic = [self modelToDictionary:CLS excludePropertyName:nameArr];
+            NSArray *columnArr = [self getColumnArr:tableName db:_db];
+            for (NSString *key in modelDic) {
+                if (![columnArr containsObject:key] && ![nameArr containsObject:key]) {
+                    flag = [_db executeUpdate:[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@", tableName, key, modelDic[key]]];
+                    if (!flag) {
+                        *rollback = YES;
+                        return;
+                    }
+                }
+            }
+        }
+    }];
+    
+    return flag;
+}
+
 // =============================   多线程操作    ===============================
 
 - (void)jq_inDatabase:(void(^)(void))block
 {
+    
     [[self dbQueue] inDatabase:^(FMDatabase *db) {
         block();
     }];
@@ -523,6 +595,7 @@ static JQFMDB *jqdb = nil;
 
 - (void)jq_inTransaction:(void(^)(BOOL *rollback))block
 {
+    
     [[self dbQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         block(rollback);
     }];
