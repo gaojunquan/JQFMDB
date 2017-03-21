@@ -20,9 +20,9 @@
 ## 安装JQFMDB
 **Cocoapods**
 ```
-1. 在 Podfile 中添加 `pod 'JQFMDB'`。
-2. 执行 `pod install` 或 `pod update`。
-3. 导入 \<JQFMDB/JQFMDB.h\>。
+1. 在 Podfile 中添加 `pod 'JQFMDB'`
+2. 执行 `pod install` 或 `pod update`
+3. 导入 <JQFMDB/JQFMDB.h>
 ```
 **手动安装**
 ```
