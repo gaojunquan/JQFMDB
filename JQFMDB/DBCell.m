@@ -45,7 +45,7 @@ static NSMutableArray *mArr;
     
     float width = self.contentView.frame.size.width;
     for (int i = 0; i < mArr.count; i++) {
-        [(UILabel *)mArr[i] setFrame:CGRectMake(i*width/8, 0, width/8, 40)];
+        [(UILabel *)mArr[i] setFrame:CGRectMake(i*width/mArr.count, 0, width/mArr.count, 40)];
     }
 }
 
@@ -59,6 +59,7 @@ static NSMutableArray *mArr;
     self.age.text = [NSString stringWithFormat:@"%d", model.age];
     self.height.text = [NSString stringWithFormat:@"%.2f", model.height];
     self.weight.text = [NSString stringWithFormat:@"%.4f", model.weight];
+    self.pkid.text = [NSString stringWithFormat:@"%ld", (long)model.pkid];
 }
 
 - (void)awakeFromNib {

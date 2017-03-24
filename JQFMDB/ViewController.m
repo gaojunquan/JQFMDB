@@ -48,7 +48,7 @@
     }
     
     JQFMDB *db = [JQFMDB shareDatabase];
-    
+    NSLog(@"last:%ld", (long)[db lastInsertPrimaryKeyId:@"user"]);
     ProductionView *proViews = [[ProductionView alloc] initWithFrame:self.view.bounds];
     
     [self.view addSubview:proViews];

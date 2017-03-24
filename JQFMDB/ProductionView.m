@@ -202,7 +202,7 @@
     [headView addSubview:titleLabel];
     
     for (int i = 0; i < columnArr.count; i++) {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(i*(width/8), 15, width/8, height-15)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(i*(width/columnArr.count), 15, width/columnArr.count, height-15)];
         label.text = columnArr[i];
         label.adjustsFontSizeToFitWidth = YES;
         label.backgroundColor = [UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:1];

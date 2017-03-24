@@ -11,6 +11,7 @@
 
 @interface DBCell : UITableViewCell
 
+@property (nonatomic, strong)UILabel *pkid;
 @property (nonatomic, strong)UILabel *name;
 @property (nonatomic, strong)UILabel *phoneNum;
 @property (nonatomic, strong)UILabel *photoData;

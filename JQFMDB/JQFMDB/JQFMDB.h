@@ -11,6 +11,12 @@
 
 
 /**
+ (主键id,自动创建) 返回最后插入的primary key id
+ @param tableName 表的名称
+ */
+- (NSInteger)lastInsertPrimaryKeyId:(NSString *)tableName;
+
+/**
  单例方法创建数据库, 如果使用shareDatabase创建,则默认在NSDocumentDirectory下创建JQFMDB.sqlite, 但只要使用这三个方法任意一个创建成功, 之后即可使用三个中任意一个方法获得同一个实例,参数可随意或nil
 
         dbName 数据库的名称 如: @"Users.sqlite", 如果dbName = nil,则默认dbName=@"JQFMDB.sqlite"
@@ -108,7 +114,7 @@
 - (void)open;
 
 /**
- 增加新字段, 在建表后还想新增字段,可以在原建表model或新model中新增对应属性,然后传入即可新增该字段,已在事务中执行
+ 增加新字段, 在建表后还想新增字段,可以在原建表model或新model中新增对应属性,然后传入即可新增该字段,该操作已在事务中执行
  
  @param tableName 表的名称
  @param parameters 如果传Model:数据库新增字段为建表时model所没有的属性,如果传dictionary格式为@{@"newname":@"TEXT"}
@@ -119,7 +125,7 @@
 - (BOOL)jq_alterTable:(NSString *)tableName dicOrModel:(id)parameters;
 
 
-// =============================   多线程操作    ===============================
+// =============================   线程安全操作    ===============================
 
 /**
  将操作语句放入block中即可保证线程安全, 如:
