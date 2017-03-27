@@ -320,9 +320,12 @@ static JQFMDB *jqdb = nil;
 
 - (BOOL)jq_deleteTable:(NSString *)tableName whereFormat:(NSString *)format, ...
 {
-    
+    va_list args;
+    va_start(args, format);
+    NSString *where = [[NSString alloc] initWithFormat:format locale:[NSLocale currentLocale] arguments:args];
+    va_end(args);
     BOOL flag;
-    NSMutableString *finalStr = [[NSMutableString alloc] initWithFormat:@"delete from %@  %@", tableName,format];
+    NSMutableString *finalStr = [[NSMutableString alloc] initWithFormat:@"delete from %@  %@", tableName,where];
     flag = [_db executeUpdate:finalStr];
     
     return flag;
@@ -330,7 +333,10 @@ static JQFMDB *jqdb = nil;
 
 - (BOOL)jq_updateTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...
 {
-    
+    va_list args;
+    va_start(args, format);
+    NSString *where = [[NSString alloc] initWithFormat:format locale:[NSLocale currentLocale] arguments:args];
+    va_end(args);
     BOOL flag;
     NSDictionary *dic;
     NSArray *clomnArr = [self getColumnArr:tableName db:_db];
@@ -353,7 +359,7 @@ static JQFMDB *jqdb = nil;
     }
     
     [finalStr deleteCharactersInRange:NSMakeRange(finalStr.length-1, 1)];
-    if (format.length) [finalStr appendFormat:@" %@", format];
+    if (where.length) [finalStr appendFormat:@" %@", where];
     
     
     flag =  [_db executeUpdate:finalStr withArgumentsInArray:argumentsArr];
@@ -363,10 +369,13 @@ static JQFMDB *jqdb = nil;
 
 - (NSArray *)jq_lookupTable:(NSString *)tableName dicOrModel:(id)parameters whereFormat:(NSString *)format, ...
 {
-    
+    va_list args;
+    va_start(args, format);
+    NSString *where = [[NSString alloc] initWithFormat:format locale:[NSLocale currentLocale] arguments:args];
+    va_end(args);
     NSMutableArray *resultMArr = [NSMutableArray arrayWithCapacity:0];
     NSDictionary *dic;
-    NSMutableString *finalStr = [[NSMutableString alloc] initWithFormat:@"select * from %@ %@", tableName, format?format:@""];
+    NSMutableString *finalStr = [[NSMutableString alloc] initWithFormat:@"select * from %@ %@", tableName, where?where:@""];
     NSArray *clomnArr = [self getColumnArr:tableName db:_db];
     
     FMResultSet *set = [_db executeQuery:finalStr];
