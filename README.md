@@ -58,7 +58,7 @@ JQFMDB *db = [JQFMDB shareDatabase:@"test.sqlite" path:[NSSearchPathForDirectori
 
 如果操作几个数据库可以init方法获得不同实例, 参数说明同上.
 
-#### 创建表
+#### 创建表(默认创建主键pkid)
 
 ###### 方式一(用Model创建表)
 ```
@@ -89,6 +89,13 @@ JQFMDB *db = [JQFMDB shareDatabase:@"test.sqlite" path:[NSSearchPathForDirectori
 // 创建表 @"user"=表的名称 表的字段为字典的key,类型为字典的value
 [db jq_createTable:@"user" dicOrModel:@{@"name":@"TEXT", @"age":@"INTEGER"}];
 ```
+###### 主键用法
+```
+主键是默认自动创建的,名为pkid,如果你需要在你的Model中使用主键, 需要添加主键属性, 属性名必须为pkid
+@property (nonatomic, assign)NSInteger pkid;
+主键不会参加插入和修改操作
+```
+
 ### 增删改查之插入
 ----
 无论你想插入的是一个model还是dictionary都没问题,都会智能接收并存储;插入一组数据, 也支持model和dictionary混合的数组
