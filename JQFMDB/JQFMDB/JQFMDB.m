@@ -15,9 +15,13 @@
 #define SQL_REAL     @"REAL" //浮点
 #define SQL_BLOB     @"BLOB" //data
 
-static NSString *_dbName;
-static FMDatabaseQueue *_dbQueue;
-static FMDatabase *_db;
+@interface JQFMDB ()
+
+@property (nonatomic, strong)NSString *dbName;
+@property (nonatomic, strong)FMDatabaseQueue *dbQueue;
+@property (nonatomic, strong)FMDatabase *db;
+
+@end
 
 @implementation JQFMDB
 
@@ -26,9 +30,9 @@ static FMDatabase *_db;
     if (!_dbQueue) {
         NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:_dbName];
         FMDatabaseQueue *fmdb = [FMDatabaseQueue databaseQueueWithPath:path];
-        _dbQueue = fmdb;
+        self.dbQueue = fmdb;
         [_db close];
-        _db = [fmdb valueForKey:@"_db"];
+        self.db = [fmdb valueForKey:@"_db"];
     }
     return _dbQueue;
 }
@@ -61,11 +65,11 @@ static JQFMDB *jqdb = nil;
         FMDatabase *fmdb = [FMDatabase databaseWithPath:path];
         if ([fmdb open]) {
             jqdb = JQFMDB.new;
-            _db = fmdb;
-            _dbName = dbName;
+            jqdb.db = fmdb;
+            jqdb.dbName = dbName;
         }
     }
-    if (![_db open]) {
+    if (![jqdb.db open]) {
         NSLog(@"database can not open !");
         return nil;
     };
@@ -94,8 +98,8 @@ static JQFMDB *jqdb = nil;
     if ([fmdb open]) {
         self = [self init];
         if (self) {
-            _db = fmdb;
-            _dbName = dbName;
+            self.db = fmdb;
+            self.dbName = dbName;
             return self;
         }
     }
