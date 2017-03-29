@@ -326,7 +326,7 @@ static JQFMDB *jqdb = nil;
 {
     va_list args;
     va_start(args, format);
-    NSString *where = [[NSString alloc] initWithFormat:format locale:[NSLocale currentLocale] arguments:args];
+    NSString *where = format?[[NSString alloc] initWithFormat:format locale:[NSLocale currentLocale] arguments:args]:format;
     va_end(args);
     BOOL flag;
     NSMutableString *finalStr = [[NSMutableString alloc] initWithFormat:@"delete from %@  %@", tableName,where];
@@ -339,7 +339,7 @@ static JQFMDB *jqdb = nil;
 {
     va_list args;
     va_start(args, format);
-    NSString *where = [[NSString alloc] initWithFormat:format locale:[NSLocale currentLocale] arguments:args];
+    NSString *where = format?[[NSString alloc] initWithFormat:format locale:[NSLocale currentLocale] arguments:args]:format;
     va_end(args);
     BOOL flag;
     NSDictionary *dic;
@@ -375,7 +375,7 @@ static JQFMDB *jqdb = nil;
 {
     va_list args;
     va_start(args, format);
-    NSString *where = [[NSString alloc] initWithFormat:format locale:[NSLocale currentLocale] arguments:args];
+    NSString *where = format?[[NSString alloc] initWithFormat:format locale:[NSLocale currentLocale] arguments:args]:format;
     va_end(args);
     NSMutableArray *resultMArr = [NSMutableArray arrayWithCapacity:0];
     NSDictionary *dic;
@@ -398,9 +398,6 @@ static JQFMDB *jqdb = nil;
                     if (value)
                         resultDic = [NSDictionary dictionaryWithObject:value forKey:key];
                 } else if ([dic[key] isEqualToString:SQL_INTEGER]) {
-                    if ([key isEqualToString:@"pkid"]) {
-                        NSLog(@"11");
-                    }
                     resultDic = [NSDictionary dictionaryWithObject:@([set longLongIntForColumn:key]) forKey:key];
                 } else if ([dic[key] isEqualToString:SQL_REAL]) {
                     resultDic = [NSDictionary dictionaryWithObject:[NSNumber numberWithDouble:[set doubleForColumn:key]] forKey:key];
