@@ -389,23 +389,23 @@ static JQFMDB *jqdb = nil;
         
         while ([set next]) {
             
-            NSDictionary *resultDic = nil;
+            NSMutableDictionary *resultDic = [NSMutableDictionary dictionaryWithCapacity:0];
             for (NSString *key in dic) {
-                resultDic = nil;
                 
                 if ([dic[key] isEqualToString:SQL_TEXT]) {
                     id value = [set stringForColumn:key];
                     if (value)
-                        resultDic = [NSDictionary dictionaryWithObject:value forKey:key];
+                        [resultDic setObject:value forKey:key];
                 } else if ([dic[key] isEqualToString:SQL_INTEGER]) {
-                    resultDic = [NSDictionary dictionaryWithObject:@([set longLongIntForColumn:key]) forKey:key];
+                    [resultDic setObject:@([set longLongIntForColumn:key]) forKey:key];
                 } else if ([dic[key] isEqualToString:SQL_REAL]) {
-                    resultDic = [NSDictionary dictionaryWithObject:[NSNumber numberWithDouble:[set doubleForColumn:key]] forKey:key];
+                    [resultDic setObject:[NSNumber numberWithDouble:[set doubleForColumn:key]] forKey:key];
                 } else if ([dic[key] isEqualToString:SQL_BLOB]) {
                     id value = [set dataForColumn:key];
                     if (value)
-                        resultDic = [NSDictionary dictionaryWithObject:value forKey:key];
+                        [resultDic setObject:value forKey:key];
                 }
+                
             }
             
             if (resultDic) [resultMArr addObject:resultDic];

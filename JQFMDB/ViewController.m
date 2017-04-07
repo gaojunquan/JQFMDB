@@ -185,6 +185,13 @@
         NSLog(@"name=cleanmonkey:%@", personArr);
     }];
     
+    // 把查询的结果存入字典示例
+//    [proViews lookupMethod1:^{
+//        ////查找name=cleanmonkey的数据
+//        NSArray *personArr = [db jq_lookupTable:@"user" dicOrModel:@{@"name":@"TEXT",@"age":@"INTEGER",} whereFormat:@"where name = 'cleanmonkey'"];
+//        NSLog(@"name=cleanmonkey:%@", personArr);
+//    }];
+    
     [proViews lookupMethod2:^{
         //查找表中所有数据
         NSArray *personArr = [db jq_lookupTable:@"user" dicOrModel:[Person class] whereFormat:nil];
