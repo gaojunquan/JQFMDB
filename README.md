@@ -13,6 +13,7 @@
 * 操作简单, Model和Dictionary直接存储
 * 拓展性强
 * 不侵入你的任何Model
+* 不需要实现某些奇怪的协议
 
 #### 截图
 ![模拟器截图](http://upload-images.jianshu.io/upload_images/1982600-1d9412ee0d109a21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/340)
