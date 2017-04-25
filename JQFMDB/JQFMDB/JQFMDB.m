@@ -17,7 +17,7 @@
 
 @interface JQFMDB ()
 
-@property (nonatomic, strong)NSString *dbName;
+@property (nonatomic, strong)NSString *dbPath;
 @property (nonatomic, strong)FMDatabaseQueue *dbQueue;
 @property (nonatomic, strong)FMDatabase *db;
 
@@ -28,8 +28,7 @@
 - (FMDatabaseQueue *)dbQueue
 {
     if (!_dbQueue) {
-        NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:_dbName];
-        FMDatabaseQueue *fmdb = [FMDatabaseQueue databaseQueueWithPath:path];
+        FMDatabaseQueue *fmdb = [FMDatabaseQueue databaseQueueWithPath:_dbPath];
         self.dbQueue = fmdb;
         [_db close];
         self.db = [fmdb valueForKey:@"_db"];
@@ -59,14 +58,14 @@ static JQFMDB *jqdb = nil;
         if (!dbPath) {
             path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:dbName];
         } else {
-            path = dbPath;
+            path = [dbPath stringByAppendingPathComponent:dbName];
         }
         
         FMDatabase *fmdb = [FMDatabase databaseWithPath:path];
         if ([fmdb open]) {
             jqdb = JQFMDB.new;
             jqdb.db = fmdb;
-            jqdb.dbName = dbName;
+            jqdb.dbPath = path;
         }
     }
     if (![jqdb.db open]) {
@@ -90,7 +89,7 @@ static JQFMDB *jqdb = nil;
     if (!dbPath) {
         path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:dbName];
     } else {
-        path = dbPath;
+        path = [dbPath stringByAppendingPathComponent:dbName];
     }
     
     FMDatabase *fmdb = [FMDatabase databaseWithPath:path];
@@ -99,7 +98,7 @@ static JQFMDB *jqdb = nil;
         self = [self init];
         if (self) {
             self.db = fmdb;
-            self.dbName = dbName;
+            self.dbPath = path;
             return self;
         }
     }

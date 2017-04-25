@@ -47,11 +47,12 @@
         [mArr addObject:person];
     }
     
-    JQFMDB *db = [JQFMDB shareDatabase];
-    NSLog(@"last:%ld", (long)[db lastInsertPrimaryKeyId:@"user"]);
     ProductionView *proViews = [[ProductionView alloc] initWithFrame:self.view.bounds];
     
     [self.view addSubview:proViews];
+    
+    JQFMDB *db = [JQFMDB shareDatabase];
+    NSLog(@"last:%ld", (long)[db lastInsertPrimaryKeyId:@"user"]);
     
     // 增删改查操作集合
     [self insertMethod:proViews db:db model:person array:mArr];

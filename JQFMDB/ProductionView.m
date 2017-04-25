@@ -40,7 +40,10 @@
 
 - (void)configViews
 {
-    JQFMDB *db = [JQFMDB shareDatabase];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];
+    // 这里执行创建数据库,以后的shareDatabase系列都属于获取当前的数据库引用
+    JQFMDB *db = [JQFMDB shareDatabase:@"qq.sqlite" path:path];
     
     [self creatSegmentAndSView];
     
