@@ -132,7 +132,7 @@ static JQFMDB *jqdb = nil;
         dic = [self modelToDictionary:CLS excludePropertyName:nameArr];
     }
     
-    NSMutableString *fieldStr = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (pkid  INTEGER PRIMARY KEY,", tableName];
+    NSMutableString *fieldStr = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (pkid  INTEGER PRIMARY KEY", tableName];
     
     int keyCount = 0;
     for (NSString *key in dic) {
@@ -141,66 +141,16 @@ static JQFMDB *jqdb = nil;
         if ((nameArr && [nameArr containsObject:key]) || [key isEqualToString:@"pkid"]) {
             continue;
         }
-        if (keyCount == dic.count) {
-            [fieldStr appendFormat:@" %@ %@)", key, dic[key]];
-            break;
-        }
         
-        [fieldStr appendFormat:@" %@ %@,", key, dic[key]];
+        [fieldStr appendFormat:@", %@ %@", key, dic[key]];
     }
+    [fieldStr appendString:@")"];
     
     BOOL creatFlag;
     creatFlag = [_db executeUpdate:fieldStr];
     
     return creatFlag;
 }
-
-- (NSString *)createTable:(NSString *)tableName dictionary:(NSDictionary *)dic excludeName:(NSArray *)nameArr
-{
-    NSMutableString *fieldStr = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (pkid  INTEGER PRIMARY KEY,", tableName];
-    
-    int keyCount = 0;
-    for (NSString *key in dic) {
-        
-        keyCount++;
-        if ((nameArr && [nameArr containsObject:key]) || [key isEqualToString:@"pkid"]) {
-            continue;
-        }
-        if (keyCount == dic.count) {
-            [fieldStr appendFormat:@" %@ %@)", key, dic[key]];
-            break;
-        }
-        
-        [fieldStr appendFormat:@" %@ %@,", key, dic[key]];
-    }
-    
-    return fieldStr;
-}
-
-- (NSString *)createTable:(NSString *)tableName model:(Class)cls excludeName:(NSArray *)nameArr
-{
-    NSMutableString *fieldStr = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (pkid INTEGER PRIMARY KEY,", tableName];
-    
-    NSDictionary *dic = [self modelToDictionary:cls excludePropertyName:nameArr];
-    int keyCount = 0;
-    for (NSString *key in dic) {
-        
-        keyCount++;
-        
-        if ([key isEqualToString:@"pkid"]) {
-            continue;
-        }
-        if (keyCount == dic.count) {
-            [fieldStr appendFormat:@" %@ %@)", key, dic[key]];
-            break;
-        }
-        
-        [fieldStr appendFormat:@" %@ %@,", key, dic[key]];
-    }
-    
-    return fieldStr;
-}
-
 #pragma mark - *************** runtime
 - (NSDictionary *)modelToDictionary:(Class)cls excludePropertyName:(NSArray *)nameArr
 {
