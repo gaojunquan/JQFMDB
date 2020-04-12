@@ -217,7 +217,7 @@ static JQFMDB *jqdb = nil;
 
 // 得到表里的字段名称
 - (NSArray *)getColumnArr:(NSString *)tableName db:(FMDatabase *)db
-{    
+{
     NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
     
     FMResultSet *resultSet = [db getTableSchema:tableName];
@@ -263,7 +263,7 @@ static JQFMDB *jqdb = nil;
     
     [finalStr deleteCharactersInRange:NSMakeRange(finalStr.length-1, 1)];
     if (tempStr.length)
-        [tempStr deleteCharactersInRange:NSMakeRange(tempStr.length-1, 1)];
+    [tempStr deleteCharactersInRange:NSMakeRange(tempStr.length-1, 1)];
     
     [finalStr appendFormat:@") values (%@)", tempStr];
     
@@ -344,7 +344,7 @@ static JQFMDB *jqdb = nil;
                 if ([dic[key] isEqualToString:SQL_TEXT]) {
                     id value = [set stringForColumn:key];
                     if (value)
-                        [resultDic setObject:value forKey:key];
+                    [resultDic setObject:value forKey:key];
                 } else if ([dic[key] isEqualToString:SQL_INTEGER]) {
                     [resultDic setObject:@([set longLongIntForColumn:key]) forKey:key];
                 } else if ([dic[key] isEqualToString:SQL_REAL]) {
@@ -352,7 +352,7 @@ static JQFMDB *jqdb = nil;
                 } else if ([dic[key] isEqualToString:SQL_BLOB]) {
                     id value = [set dataForColumn:key];
                     if (value)
-                        [resultDic setObject:value forKey:key];
+                    [resultDic setObject:value forKey:key];
                 }
                 
             }
@@ -385,7 +385,7 @@ static JQFMDB *jqdb = nil;
                     if ([propertyType[name] isEqualToString:SQL_TEXT]) {
                         id value = [set stringForColumn:name];
                         if (value)
-                            [model setValue:value forKey:name];
+                        [model setValue:value forKey:name];
                     } else if ([propertyType[name] isEqualToString:SQL_INTEGER]) {
                         [model setValue:@([set longLongIntForColumn:name]) forKey:name];
                     } else if ([propertyType[name] isEqualToString:SQL_REAL]) {
@@ -393,7 +393,7 @@ static JQFMDB *jqdb = nil;
                     } else if ([propertyType[name] isEqualToString:SQL_BLOB]) {
                         id value = [set dataForColumn:name];
                         if (value)
-                            [model setValue:value forKey:name];
+                        [model setValue:value forKey:name];
                     }
                 }
                 
@@ -574,4 +574,5 @@ static JQFMDB *jqdb = nil;
 
 
 @end
+
 
