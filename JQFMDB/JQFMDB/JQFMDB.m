@@ -132,7 +132,7 @@ static JQFMDB *jqdb = nil;
         dic = [self modelToDictionary:CLS excludePropertyName:nameArr];
     }
     
-    NSMutableString *fieldStr = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (pkid  INTEGER PRIMARY KEY,", tableName];
+    NSMutableString *fieldStr = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (pkid  INTEGER PRIMARY KEY", tableName];
     
     int keyCount = 0;
     for (NSString *key in dic) {
@@ -141,66 +141,16 @@ static JQFMDB *jqdb = nil;
         if ((nameArr && [nameArr containsObject:key]) || [key isEqualToString:@"pkid"]) {
             continue;
         }
-        if (keyCount == dic.count) {
-            [fieldStr appendFormat:@" %@ %@)", key, dic[key]];
-            break;
-        }
         
-        [fieldStr appendFormat:@" %@ %@,", key, dic[key]];
+        [fieldStr appendFormat:@", %@ %@", key, dic[key]];
     }
+    [fieldStr appendString:@")"];
     
     BOOL creatFlag;
     creatFlag = [_db executeUpdate:fieldStr];
     
     return creatFlag;
 }
-
-- (NSString *)createTable:(NSString *)tableName dictionary:(NSDictionary *)dic excludeName:(NSArray *)nameArr
-{
-    NSMutableString *fieldStr = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (pkid  INTEGER PRIMARY KEY,", tableName];
-    
-    int keyCount = 0;
-    for (NSString *key in dic) {
-        
-        keyCount++;
-        if ((nameArr && [nameArr containsObject:key]) || [key isEqualToString:@"pkid"]) {
-            continue;
-        }
-        if (keyCount == dic.count) {
-            [fieldStr appendFormat:@" %@ %@)", key, dic[key]];
-            break;
-        }
-        
-        [fieldStr appendFormat:@" %@ %@,", key, dic[key]];
-    }
-    
-    return fieldStr;
-}
-
-- (NSString *)createTable:(NSString *)tableName model:(Class)cls excludeName:(NSArray *)nameArr
-{
-    NSMutableString *fieldStr = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (pkid INTEGER PRIMARY KEY,", tableName];
-    
-    NSDictionary *dic = [self modelToDictionary:cls excludePropertyName:nameArr];
-    int keyCount = 0;
-    for (NSString *key in dic) {
-        
-        keyCount++;
-        
-        if ([key isEqualToString:@"pkid"]) {
-            continue;
-        }
-        if (keyCount == dic.count) {
-            [fieldStr appendFormat:@" %@ %@)", key, dic[key]];
-            break;
-        }
-        
-        [fieldStr appendFormat:@" %@ %@,", key, dic[key]];
-    }
-    
-    return fieldStr;
-}
-
 #pragma mark - *************** runtime
 - (NSDictionary *)modelToDictionary:(Class)cls excludePropertyName:(NSArray *)nameArr
 {
@@ -267,7 +217,7 @@ static JQFMDB *jqdb = nil;
 
 // 得到表里的字段名称
 - (NSArray *)getColumnArr:(NSString *)tableName db:(FMDatabase *)db
-{    
+{
     NSMutableArray *mArr = [NSMutableArray arrayWithCapacity:0];
     
     FMResultSet *resultSet = [db getTableSchema:tableName];
@@ -313,7 +263,7 @@ static JQFMDB *jqdb = nil;
     
     [finalStr deleteCharactersInRange:NSMakeRange(finalStr.length-1, 1)];
     if (tempStr.length)
-        [tempStr deleteCharactersInRange:NSMakeRange(tempStr.length-1, 1)];
+    [tempStr deleteCharactersInRange:NSMakeRange(tempStr.length-1, 1)];
     
     [finalStr appendFormat:@") values (%@)", tempStr];
     
@@ -394,7 +344,7 @@ static JQFMDB *jqdb = nil;
                 if ([dic[key] isEqualToString:SQL_TEXT]) {
                     id value = [set stringForColumn:key];
                     if (value)
-                        [resultDic setObject:value forKey:key];
+                    [resultDic setObject:value forKey:key];
                 } else if ([dic[key] isEqualToString:SQL_INTEGER]) {
                     [resultDic setObject:@([set longLongIntForColumn:key]) forKey:key];
                 } else if ([dic[key] isEqualToString:SQL_REAL]) {
@@ -402,7 +352,7 @@ static JQFMDB *jqdb = nil;
                 } else if ([dic[key] isEqualToString:SQL_BLOB]) {
                     id value = [set dataForColumn:key];
                     if (value)
-                        [resultDic setObject:value forKey:key];
+                    [resultDic setObject:value forKey:key];
                 }
                 
             }
@@ -435,7 +385,7 @@ static JQFMDB *jqdb = nil;
                     if ([propertyType[name] isEqualToString:SQL_TEXT]) {
                         id value = [set stringForColumn:name];
                         if (value)
-                            [model setValue:value forKey:name];
+                        [model setValue:value forKey:name];
                     } else if ([propertyType[name] isEqualToString:SQL_INTEGER]) {
                         [model setValue:@([set longLongIntForColumn:name]) forKey:name];
                     } else if ([propertyType[name] isEqualToString:SQL_REAL]) {
@@ -443,7 +393,7 @@ static JQFMDB *jqdb = nil;
                     } else if ([propertyType[name] isEqualToString:SQL_BLOB]) {
                         id value = [set dataForColumn:name];
                         if (value)
-                            [model setValue:value forKey:name];
+                        [model setValue:value forKey:name];
                     }
                 }
                 
@@ -624,4 +574,5 @@ static JQFMDB *jqdb = nil;
 
 
 @end
+
 
